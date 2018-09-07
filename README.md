@@ -16,6 +16,12 @@ systemctl enable kubelet && systemctl start kubelet
 echo "deploying kubernetes (with calico)..."
 kubeadm init --pod-network-cidr=192.168.0.0/16 # add --apiserver-advertise-address="ip" if you want to use a different IP address than the main server IP
 export KUBECONFIG=/etc/kubernetes/admin.conf
+ 
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+
 
 # kubernetes Slave Installation
 --------------------------------
